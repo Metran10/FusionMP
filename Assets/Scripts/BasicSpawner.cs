@@ -18,6 +18,10 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     private bool _mouseButton0;
     private bool _mouseButton1;
 
+
+    InputHandler inputHandler;
+
+
     async void StartGame(GameMode mode)
     {
         _runner = gameObject.AddComponent<NetworkRunner>();
@@ -102,6 +106,28 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         if (_mouseButton1)
             data.buttons |= NetworkInputData.MOUSEBUTTON2;
         _mouseButton1 = false;
+
+        if (Input.GetKey(KeyCode.Space))
+            data.isJumping = true;
+
+        Vector2 view = new Vector2();
+
+        view.x = Input.GetAxis("Mouse X");
+        view.y = Input.GetAxis("Mouse Y") * -1;
+
+
+        data.rotationInput = view.x;
+        data.lookVector = view;
+
+        Vector2 move = new Vector2();
+        move.x = Input.GetAxis("Horizontal");
+        move.y = Input.GetAxis("Vertical");
+
+        data.moveVector = move;
+        data.movementInput = move;
+
+
+
 
         input.Set(data);
 
